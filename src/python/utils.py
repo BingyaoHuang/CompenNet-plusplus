@@ -13,7 +13,8 @@ import torch
 import torch.nn as nn
 import pytorch_ssim
 from torch.utils.data import DataLoader
-from CompenNetDataset import SimpleDataset
+from CompenNetPlusplusDataset import SimpleDataset
+
 
 # set random number generators' seeds
 def resetRNGseed(seed):
@@ -43,9 +44,10 @@ def montage(im_in, grid_shape=None, padding_width=5, fill=(1, 1, 1), multichanne
         assert im_in.ndimension() == 4, 'requires a 4-D tensor with shape (N, C, row, col)'
 
         if im_in.device.type == 'cuda':
-            im = im_in.cpu().numpy().transpose(0, 2, 3, 1)  # (N, C, row, col) to (N, row, col, C)
-        else:
-            im = im_in.numpy().transpose(0, 2, 3, 1)  # (N, C, row, col) to (N, row, col, C)
+            im_in = im_in.cpu()
+        if im_in.requires_grad:
+            im_in = im_in.detach()
+        im = im_in.numpy().transpose(0, 2, 3, 1)  # (N, C, row, col) to (N, row, col, C)
 
     if grid_shape is None:
         num_rows = math.ceil(math.sqrt(im.shape[0]))
@@ -63,6 +65,33 @@ def montage(im_in, grid_shape=None, padding_width=5, fill=(1, 1, 1), multichanne
                                   grid_shape=grid_shape)
 
     return im_out
+
+
+# Same as np.repeat, while torch.repeat works as np.tile
+def repeat_np(a, repeats, dim):
+    '''
+    Substitute for numpy's repeat function. Source from https://discuss.pytorch.org/t/how-to-tile-a-tensor/13853/2
+    torch.repeat([1,2,3], 2) --> [1, 2, 3, 1, 2, 3]
+    np.repeat([1,2,3], repeats=2, axis=0) --> [1, 1, 2, 2, 3, 3]
+
+    :param a: tensor
+    :param repeats: number of repeats
+    :param dim: dimension where to repeat
+    :return: tensor with repitions
+    '''
+
+    init_dim = a.size(dim)
+    repeat_idx = [1] * a.dim()
+    repeat_idx[dim] = repeats
+    a = a.repeat(*(repeat_idx))
+    if a.is_cuda:  # use cuda-device if input was on cuda device already
+        order_index = torch.cuda.LongTensor(
+            torch.cat([init_dim * torch.arange(repeats, device=a.device) + i for i in range(init_dim)]))
+    else:
+        order_index = torch.LongTensor(
+            torch.cat([init_dim * torch.arange(repeats) + i for i in range(init_dim)]))
+
+    return torch.index_select(a, dim, order_index)
 
 
 # save 4D np.ndarray or torch tensor to image files
