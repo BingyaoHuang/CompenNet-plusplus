@@ -40,33 +40,7 @@ torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
 
 # %% K=24 setups
-# dataset_root = fullfile(os.getcwd(), '../../Dataset')
-#
-# data_list = [
-#     'canonCamlink/dark/pos1/cloud_np',
-#     'canonCamlink/dark/pos1/lavender_np',
-#     'canonCamlink/dark/pos2/cubes_np',
-#     'canonCamlink/dark/pos3/bars_spec_np',
-#     'canonCamlink/dark/pos3/bubbles_np',
-#     'canonCamlink/dark/pos3/curves_np',
-#     'canonCamlink/dark/pos3/lavender_spec_np',
-#     'canonCamlink/dark/pos5/curves_np',
-#     'canonCamlink/dark/pos5/lavender_np',
-#     'canonCamlink/dark/pos5/stripes_np',
-#     'canonCamlink/dark/pos6/cubes_np',
-#     'canonCamlink/dark/pos6/curves_np',
-#     'canonCamlink/dark/pos6/lavender_np',
-#     'canonCamlink/dark/pos6/pillow_np',
-#     'canonCamlink/dark/pos6/stripes_np',
-#     'canonCamlink/light/pos4/bubbles_np',
-#     'canonCamlink/light/pos4/cloud_np',
-#     'canonCamlink/light/pos4/curves_np',
-#     'canonCamlink/light/pos4/squares_np',
-#     'canonCamlink/light/pos4/water_np',
-# ]
-
-dataset_root = fullfile(os.getcwd(), '../../public')
-# dataset_root = fullfile('D:/iccv19_dataset/public')
+dataset_root = fullfile(os.getcwd(), '../../data')
 
 data_list = [
     'light1/pos1/cloud_np',
