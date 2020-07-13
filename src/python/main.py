@@ -94,6 +94,9 @@ train_option_default = {'data_name': '',  # will be set later
 # a flag that decides whether to compute and save the compensated images to the drive
 save_compensation = True
 
+# a flag indicating reproducing ICCV'19 paper's uncompensated metrics
+iccv19_paper_uncompensated = True
+
 # log file
 from time import localtime, strftime
 
@@ -122,15 +125,16 @@ compen_net = initCompenNet(compen_net, dataset_root, device)
 for data_name in data_list:
     # load training and validation data
     data_root = fullfile(dataset_root, data_name)
-    cam_surf, cam_train, cam_valid, prj_train, prj_valid, mask_corners = loadData(dataset_root, data_name, input_size)
+    cam_surf, cam_train, cam_valid, cam_valid_warpSL, prj_train, prj_valid, mask_corners = loadData(dataset_root, data_name, input_size)
 
     # surface image for training and validation
     cam_surf_train = cam_surf.expand_as(cam_train)
     cam_surf_valid = cam_surf.expand_as(cam_valid)
 
     # convert valid data to CUDA tensor if you have sufficient GPU memory (significant speedup)
-    cam_valid.to(device)
-    prj_valid.to(device)
+    cam_valid = cam_valid.to(device)
+    if iccv19_paper_uncompensated: cam_valid_warpSL = cam_valid_warpSL.to(device) # used to compute uncompensated metrics
+    prj_valid = prj_valid.to(device)
 
     # validation data, 200 image pairs
     valid_data = dict(cam_surf=cam_surf_valid, cam_valid=cam_valid, prj_valid=prj_valid)
@@ -190,9 +194,14 @@ for data_name in data_list:
 
                 # save results to log file
                 ret_str = '{:30s}{:<30}{:<20}{:<15}{:<15}{:<15}{:<15.4f}{:<15.4f}{:<15.4f}{:<15.4f}{:<15.4f}{:<15.4f}\n'
-                cam_valid_resize = F.interpolate(cam_valid, prj_valid.shape[2:4])
+
+                if iccv19_paper_uncompensated:
+                    cam_valid_uncmp = cam_valid_warpSL
+                else:
+                    cam_valid_uncmp = F.interpolate(cam_valid, prj_valid.shape[2:4])
+
                 log_file.write(ret_str.format(data_name, model_name, loss, num_train, train_option['batch_size'], train_option['max_iters'],
-                                              psnr(cam_valid_resize, prj_valid), rmse(cam_valid_resize, prj_valid), ssim(cam_valid_resize, prj_valid),
+                                              psnr(cam_valid_uncmp, prj_valid), rmse(cam_valid_uncmp, prj_valid), ssim(cam_valid_uncmp, prj_valid),
                                               valid_psnr, valid_rmse, valid_ssim))
                 log_file.close()
 

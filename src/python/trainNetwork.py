@@ -134,6 +134,7 @@ def loadData(dataset_root, data_name, input_size):
     cam_train_path = fullfile(data_root, 'cam/raw/train')
     prj_train_path = fullfile(dataset_root, 'train')
     cam_valid_path = fullfile(data_root, 'cam/raw/test')
+    cam_valid_warpSL_path = fullfile(data_root, 'cam/warpSL/test')
     prj_valid_path = fullfile(dataset_root, 'test')
     print("Loading data from '{}'".format(data_root))
 
@@ -144,6 +145,7 @@ def loadData(dataset_root, data_name, input_size):
 
     # validation data
     cam_valid = readImgsMT(cam_valid_path)
+    cam_valid_warpSL = readImgsMT(cam_valid_warpSL_path)
     prj_valid = readImgsMT(prj_valid_path)
 
     # find projector FOV mask
@@ -165,7 +167,7 @@ def loadData(dataset_root, data_name, input_size):
     cam_train = torch.where(prj_fov_mask, cam_train, torch.tensor([0.]))
     cam_valid = torch.where(prj_fov_mask, cam_valid, torch.tensor([0.]))
 
-    return cam_surf, cam_train, cam_valid, prj_train, prj_valid, mask_corners
+    return cam_surf, cam_train, cam_valid, cam_valid_warpSL, prj_train, prj_valid, mask_corners
 
 # initialize CompenNet to |x-s| without actual projections
 def initCompenNet(compen_net, dataset_root, device):
