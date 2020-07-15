@@ -125,7 +125,7 @@ compen_net = initCompenNet(compen_net, dataset_root, device)
 for data_name in data_list:
     # load training and validation data
     data_root = fullfile(dataset_root, data_name)
-    cam_surf, cam_train, cam_valid, cam_valid_warpSL, prj_train, prj_valid, mask_corners = loadData(dataset_root, data_name, input_size)
+    cam_surf, cam_train, cam_valid, cam_raw_valid, cam_desire_valid, prj_train, prj_valid, mask_corners = loadData(dataset_root, data_name, input_size)
 
     # surface image for training and validation
     cam_surf_train = cam_surf.expand_as(cam_train)
@@ -133,7 +133,6 @@ for data_name in data_list:
 
     # convert valid data to CUDA tensor if you have sufficient GPU memory (significant speedup)
     cam_valid = cam_valid.to(device)
-    if iccv19_paper_uncompensated: cam_valid_warpSL = cam_valid_warpSL.to(device) # used to compute uncompensated metrics
     prj_valid = prj_valid.to(device)
 
     # validation data, 200 image pairs
@@ -196,12 +195,13 @@ for data_name in data_list:
                 ret_str = '{:30s}{:<30}{:<20}{:<15}{:<15}{:<15}{:<15.4f}{:<15.4f}{:<15.4f}{:<15.4f}{:<15.4f}{:<15.4f}\n'
 
                 if iccv19_paper_uncompensated:
-                    cam_valid_uncmp = cam_valid_warpSL
+                    uncmp_psnr, uncmp_rmse, uncmp_ssim = computeMetrics(cam_raw_valid, cam_desire_valid)
                 else:
                     cam_valid_uncmp = F.interpolate(cam_valid, prj_valid.shape[2:4])
+                    uncmp_psnr, uncmp_rmse, uncmp_ssim = computeMetrics(cam_valid_uncmp, prj_valid)
 
                 log_file.write(ret_str.format(data_name, model_name, loss, num_train, train_option['batch_size'], train_option['max_iters'],
-                                              psnr(cam_valid_uncmp, prj_valid), rmse(cam_valid_uncmp, prj_valid), ssim(cam_valid_uncmp, prj_valid),
+                                              uncmp_psnr, uncmp_rmse, uncmp_ssim,
                                               valid_psnr, valid_rmse, valid_ssim))
                 log_file.close()
 
