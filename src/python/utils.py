@@ -147,6 +147,39 @@ def ssim(x, y):
         return pytorch_ssim.ssim(x, y).item()
 
 
+# compute psnr, rmse and ssim
+def computeMetrics(x, y):
+    l2_fun = nn.MSELoss()
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+    last_loc = 0
+    metric_mse, metric_ssim = 0., 0.
+
+    num_imgs = x.shape[0]
+    batch_size = 50 if num_imgs > 50 else num_imgs  # Make sure mod(num_imgs, batch_size) == 0
+
+    with torch.no_grad():
+        for i in range(0, num_imgs // batch_size):
+            idx = range(last_loc, last_loc + batch_size)
+            x_batch = x[idx, :, :, :].to(device) if x.device.type != 'cuda' else x[idx, :, :, :]
+            y_batch = y[idx, :, :, :].to(device) if y.device.type != 'cuda' else y[idx, :, :, :]
+
+            # compute mse and ssim
+            metric_mse += l2_fun(x_batch, y_batch).item() * batch_size
+            metric_ssim += ssim(x_batch, y_batch) * batch_size
+
+            last_loc += batch_size
+
+        # average
+        metric_mse /= num_imgs
+        metric_ssim /= num_imgs
+
+        # rmse and psnr
+        metric_rmse = math.sqrt(metric_mse * 3)  # 3 channel image
+        metric_psnr = 10 * math.log10(1 / metric_mse)
+
+    return metric_psnr, metric_rmse, metric_ssim
+
 # count the number of parameters of a model
 def countParameters(model):
     return sum(param.numel() for param in model.parameters())
