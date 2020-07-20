@@ -159,7 +159,10 @@ def loadData(dataset_root, data_name, input_size):
         im_mask, mask_corners[i] = ImgProc.thresh(im_diff[:, :, :, i])
         prj_fov_mask[i, :, :, :] = repeat_np(torch.Tensor(np.uint8(im_mask)).unsqueeze(0), 3, 0)
 
-    prj_fov_mask = prj_fov_mask.byte()
+    if torch.__version__ > '1.1.0':
+        prj_fov_mask = prj_fov_mask.bool()
+    else:
+        prj_fov_mask = prj_fov_mask.byte()
 
     # mask out background areas that are out of projector's FOV
     cam_surf[~prj_fov_mask] = 0
