@@ -10,7 +10,7 @@ CompenNet++: End-to-end Full Projector Compensation (ICCV'19)
 ![result1](doc/real_projection.png)
 
 ## Introduction
-PyTorch implementation of [CompenNet++][1].
+PyTorch implementation of [CompenNet++][1]. Also see [journal version][7].
 
 Highlights:
 *  The proposed **CompenNet++** is the **first end-to-end full** projector compensation system.
@@ -18,7 +18,7 @@ Highlights:
 *  Two task-specific weight initialization approaches are proposed to ensure the convergence and stability of CompenNet++.
 *  Novel simplification techniques are developed to improve the running time efficiency of CompenNet++.
 
-For more info please refer to our ICCV'19 [paper][1], high-res [supplementary material ~(180M)][2] and CompenNet++ [benchmark dataset (~10G)][3]. 
+For more info please refer to our ICCV'19 [paper][1], high-res [supplementary material ~(180M)][2] and CompenNet++ [benchmark dataset (~11G)][3]. 
 
 
 ## Prerequisites
@@ -41,7 +41,7 @@ For more info please refer to our ICCV'19 [paper][1], high-res [supplementary ma
         pip install -r requirements.txt
     
 
-3. Download CompenNet++ [benchmark dataset (~10G)][3] and extract to [`data/`](data)
+3. Download CompenNet++ [benchmark dataset (~11G)][3] and extract to [`data/`](data)
 
 
 4. Start **visdom** by typing
@@ -116,7 +116,8 @@ This software is freely available for non-profit non-commercial use, and may be 
 
 [1]: https://www3.cs.stonybrook.edu/~hling/publication/CompenNet++.pdf
 [2]: https://www3.cs.stonybrook.edu/~hling/publication/CompenNet++_sup-high-res.pdf
-[3]: http://bit.ly/CompenNet-plusplus_Dataset
+[3]: https://bingyaohuang.github.com/pub/CompenNeSt++/full_cmp_data
 [4]: https://www.mathworks.com/help/vision/ref/detectcheckerboardpoints.html
 [5]: https://github.com/BingyaoHuang/CompenNet
 [6]: https://github.com/BingyaoHuang/single-shot-pro-cam-calib/tree/ismar18
+[7]: https://github.com/BingyaoHuang/CompenNeSt-plusplus
