@@ -116,7 +116,7 @@ This software is freely available for non-profit non-commercial use, and may be 
 
 [1]: https://www3.cs.stonybrook.edu/~hling/publication/CompenNet++.pdf
 [2]: https://www3.cs.stonybrook.edu/~hling/publication/CompenNet++_sup-high-res.pdf
-[3]: https://bingyaohuang.github.com/pub/CompenNeSt++/full_cmp_data
+[3]: https://bingyaohuang.github.io/pub/CompenNeSt++/full_cmp_data
 [4]: https://www.mathworks.com/help/vision/ref/detectcheckerboardpoints.html
 [5]: https://github.com/BingyaoHuang/CompenNet
 [6]: https://github.com/BingyaoHuang/single-shot-pro-cam-calib/tree/ismar18
