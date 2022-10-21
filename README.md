@@ -114,8 +114,8 @@ We thank the authors of the colorful textured sampling images.
 This software is freely available for non-profit non-commercial use, and may be redistributed under the conditions in [license](LICENSE).
 
 
-[1]: https://www3.cs.stonybrook.edu/~hling/publication/CompenNet++.pdf
-[2]: https://www3.cs.stonybrook.edu/~hling/publication/CompenNet++_sup-high-res.pdf
+[1]: https://bingyaohuang.github.io/pub/CompenNet++
+[2]: https://bingyaohuang.github.io/pub/CompenNet++/supp
 [3]: https://bingyaohuang.github.io/pub/CompenNeSt++/full_cmp_data
 [4]: https://www.mathworks.com/help/vision/ref/detectcheckerboardpoints.html
 [5]: https://github.com/BingyaoHuang/CompenNet
