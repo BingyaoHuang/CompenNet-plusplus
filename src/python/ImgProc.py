@@ -13,7 +13,8 @@ def thresh(im_in):
     im_mask = im_mask > 0
 
     # find the largest contour by area then convert it to convex hull
-    im_contours, contours, hierarchy = cv.findContours(np.uint8(im_mask), cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
+    # im_contours, contours, hierarchy = cv.findContours(np.uint8(im_mask), cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE) # only works for OpenCV 3.xAdd commentMore actions
+    contours, hierarchy = cv.findContours(np.uint8(im_mask), cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)[-2:]  # works for OpenCV 3.x and 4.x
     hulls = cv.convexHull(max(contours, key=cv.contourArea))
     im_mask = cv.fillConvexPoly(np.zeros_like(im_mask, dtype=np.uint8), hulls, True) > 0
 
