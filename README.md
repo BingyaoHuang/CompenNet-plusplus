@@ -31,36 +31,42 @@ For more info please refer to our ICCV'19 [paper][1], high-res [supplementary ma
 ## Usage
 ### 
 
-1. Clone this repo:
+1. Set up the Environment: Create a new conda environment:
+
+        conda create --name CompenNet-plusplus python=3.7
+        # Activate the environment
+        conda activate CompenNet-plusplus # Linux/macOS
+        activate CompenNet-plusplus # Windows
+2. Clone this repo:
    
         git clone https://github.com/BingyaoHuang/CompenNet-plusplus
         cd CompenNet-plusplus
 
-2. Install required packages by typing
+3. Install required packages by typing
    
         pip install -r requirements.txt
     
 
-3. Download CompenNet++ [benchmark dataset (~11G)][3] and extract to [`data/`](data)
+4. Download CompenNet++ [benchmark dataset (~11G)][3] and extract to [`data/`](data)
 
 
-4. Start **visdom** by typing
+5. Start **visdom** by typing
 
         visdom
 
-5. Once visdom is successfully started, visit [`http://localhost:8097`](http://localhost:8097) (train locally) or `http://serverhost:8097` (train remotely).
-6. Open [`main.py`](src/python/main.py) and set which GPUs to use. An example is shown below, we use GPU 0, 2 and 3 to train the model.
+6. Once visdom is successfully started, visit [`http://localhost:8097`](http://localhost:8097) (train locally) or `http://serverhost:8097` (train remotely).
+7. Open [`main.py`](src/python/main.py) and set which GPUs to use. An example is shown below, we use GPU 0, 2 and 3 to train the model.
    
         os.environ['CUDA_VISIBLE_DEVICES'] = '0, 2, 3'
         device_ids = [0, 1, 2]
 
 
-7. Run [`main.py`](src/python/main.py) to start training and testing
+8. Run [`main.py`](src/python/main.py) to start training and testing
 
         cd src/python
         python main.py
-8. The training and validation results are updated in the browser during training. An example is shown below, where the 1st figure shows the training and validation loss, rmse and ssim curves. The 2nd and 3rd montage figures are the training and validation pictures, respectively. In each montage figure, the **1st rows are the camera captured uncompensated images, the 2nd rows are CompenNet++ predicted projector input images and the 3rd rows are ground truth of projector input images**. 
-9. The quantitative comparison results will be saved to `log/%Y-%m-%d_%H_%M_%S.txt` after training.
+9. The training and validation results are updated in the browser during training. An example is shown below, where the 1st figure shows the training and validation loss, rmse and ssim curves. The 2nd and 3rd montage figures are the training and validation pictures, respectively. In each montage figure, the **1st rows are the camera captured uncompensated images, the 2nd rows are CompenNet++ predicted projector input images and the 3rd rows are ground truth of projector input images**. 
+10. The quantitative comparison results will be saved to `log/%Y-%m-%d_%H_%M_%S.txt` after training.
    
 ![visdom](doc/training_progress.png)
 
