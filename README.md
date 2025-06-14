@@ -24,8 +24,8 @@ For more info please refer to our ICCV'19 [paper][1], high-res [supplementary ma
 ## Prerequisites
 * PyTorch compatible GPU
 * Python 3
-* PyTorch >= 0.4.0
-* opencv-python 3.4.4
+* PyTorch == 0.4.0
+* opencv-python >= 3.4.4 (since 3.4.4 is no longer suported by pip, you may use 4.x instead)
 * visdom (for visualization)
 
 ## Usage
